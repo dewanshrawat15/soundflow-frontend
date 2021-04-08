@@ -1,5 +1,6 @@
 import "./Home.css";
 import logo from "../../Assets/logo.png";
+import { Link } from "react-router-dom";
 
 function Home(){
 
@@ -28,7 +29,11 @@ function Home(){
                 <div className="row">
                     <div className="col-md-4 col-md-offset-4">
                         <center>
-                            <span className="soundflow-hero-bttn text-center">Stream now!</span>
+                            <span className="soundflow-hero-bttn text-center">
+                                <Link to="/login">
+                                    Stream now!
+                                </Link>
+                            </span>
                         </center>
                     </div>
                 </div>

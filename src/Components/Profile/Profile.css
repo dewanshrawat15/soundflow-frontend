@@ -1,0 +1,21 @@
+.profile{
+    padding: 120px 0;
+}
+
+.profile-username-placeholder{
+    font-size: 25px;
+    font-weight: 300;
+}
+
+.logout-bttn{
+    outline: none!important;
+    border: none!important;
+    box-shadow: none!important;
+    background: #6FA0FF;
+    padding: 9px 64px;
+    border-radius: 42px;
+    font-weight: 600;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+}

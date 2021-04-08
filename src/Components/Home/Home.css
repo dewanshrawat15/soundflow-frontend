@@ -14,9 +14,17 @@
 
 .soundflow-hero-bttn{
     background-color: #6FA0FF;
-    padding: 12px 64px;
+    padding: 14px 64px;
     color: #fff;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 32px;
+}
+
+.soundflow-hero-bttn a,
+.soundflow-hero-bttn a:hover,
+.soundflow-hero-bttn a:active,
+.soundflow-hero-bttn a:visited{
+    text-decoration: none!important;
+    color: #fff!important;
 }
