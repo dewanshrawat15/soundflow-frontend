@@ -1,0 +1,22 @@
+.home{
+    padding: 150px 0;
+}
+
+.soundflow-hero-title{
+    font-size: 54px;
+    font-weight: 700;
+}
+
+.soundflow-hero-text{
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.soundflow-hero-bttn{
+    background-color: #6FA0FF;
+    padding: 12px 64px;
+    color: #fff;
+    font-weight: 300;
+    font-size: 18px;
+    border-radius: 32px;
+}
