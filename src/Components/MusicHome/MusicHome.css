@@ -1,0 +1,32 @@
+.browse{
+    padding: 20px 0;
+    background-color: #fff;
+}
+
+.nav-links{
+    text-align: right!important;
+    padding-top: 20px;
+}
+
+.nav-link-holder a,
+.nav-link-holder a:hover,
+.nav-link-holder a:visited,
+.nav-link-holder a:active{
+    text-decoration: none!important;
+    color: #15171c!important;
+    font-weight: 600;
+}
+
+.tracks-placeholder{
+    padding: 42px 0;
+}
+
+.track-placeholder{
+    padding: 24px 0 36px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #6FA0FF;
+}
+
+.track-placeholder-icon{
+    font-size: 25px;
+}
