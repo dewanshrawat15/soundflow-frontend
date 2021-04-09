@@ -7,10 +7,16 @@ function TrackPlaceholder(props){
     let {name, url, setAudioPlayerUrl, setAudioTrackName} = props;
 
     const playAudio = () => {
-        setAudioPlayerUrl(null);
-        setAudioPlayerUrl(url);
-        setAudioTrackName(null);
-        setAudioTrackName(name);
+        let elem = document.getElementById("audio-placeholder");
+        if(elem){
+            elem.pause()
+            elem.currentTime = 0;
+        } 
+        setAudioPlayerUrl("");
+        setTimeout(() => {
+            setAudioPlayerUrl(url);
+            setAudioTrackName(name);
+        }, 10);
     }
 
     return (
@@ -73,23 +79,33 @@ class AudioPlayer extends Component{
         }
     }
 
-    componentDidMount(){
+    componentWillUnmount(){
+        let elem = document.getElementById("audio-placeholder");
+        elem.removeEventListener("loadedmetadata", this.playSongFunc);
+    }
+
+    playSongFunc(e){
         let elem = document.getElementById("audio-placeholder");
         let cursorElem = document.getElementById("track-player-cursor");
         let currTime, duration;
-        elem.addEventListener("loadedmetadata", (e) => {
-            elem.play();
-            duration = e.target.duration;
-            setInterval(() => {
-                currTime = e.target.currentTime;
-                this.setState({
-                    duration: this.formatDuration(Math.floor(duration)),
-                    currentTime: this.formatDuration(Math.floor(currTime))
-                });
-                let currPos = (currTime / duration) * 100;
-                cursorElem.style.left = currPos.toString() + "%";
-            }, 1000);
-        })
+        elem.play();
+        duration = e.target.duration;
+        setInterval(() => {
+            currTime = e.target.currentTime;
+            this.setState({
+                duration: this.formatDuration(Math.floor(duration)),
+                currentTime: this.formatDuration(Math.floor(currTime))
+            });
+            let currPos = (currTime / duration) * 100;
+            cursorElem.style.left = currPos.toString() + "%";
+        }, 1000);
+    }
+
+    componentDidMount(){
+        let elem = document.getElementById("audio-placeholder");
+        let cursorElem = document.getElementById("track-player-cursor");
+        cursorElem.style.left = 0;
+        elem.addEventListener("loadedmetadata", (e) => this.playSongFunc(e))
     }
 
     render(){
