@@ -1,10 +1,17 @@
 import "./MusicHome.css";
-import { useState } from "react";
+import { Component, useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import logo from "../../Assets/logo.png";
 
 function TrackPlaceholder(props){
-    let {name, url} = props;
+    let {name, url, setAudioPlayerUrl, setAudioTrackName} = props;
+
+    const playAudio = () => {
+        setAudioPlayerUrl(null);
+        setAudioPlayerUrl(url);
+        setAudioTrackName(null);
+        setAudioTrackName(name);
+    }
 
     return (
         <div className="track-placeholder">
@@ -18,8 +25,8 @@ function TrackPlaceholder(props){
                             {name}
                         </div>
                     </div>
-                    <div className="col-md-1 col-md-offset-4">
-                        <i className="fa fa-play-circle track-placeholder-icon"></i>
+                    <div className="col-md-1 col-md-offset-4 right-wrapper">
+                        <i onClick={playAudio} className="fa fa-play-circle track-placeholder-icon"></i>
                     </div>
                 </div>
             </div>
@@ -27,9 +34,95 @@ function TrackPlaceholder(props){
     );
 }
 
+class AudioPlayer extends Component{
+
+    constructor(props){
+        super(props);
+        this.state = {
+            duration: null,
+            currentTime: null
+        }
+        this.formatDuration = this.formatDuration.bind(this);
+    }
+
+    formatDigit(digit){
+        digit = parseInt(digit);
+        if(digit < 10){
+            return "0" + digit;
+        }
+        return digit;
+    }
+
+    getMinutes(time){
+        return parseInt(time / 60);
+    }
+
+    getSeconds(time){
+        return parseInt(time) % 60;
+    }
+    
+    formatDuration(time){
+        let digit = this.formatDigit(time);
+        if(time < 60){
+            return "00:" + digit;
+        }
+        else{
+            let minutes = this.formatDigit(this.getMinutes(time));
+            let seconds = this.formatDigit(this.getSeconds(time));
+            return minutes + ":" + seconds;
+        }
+    }
+
+    componentDidMount(){
+        let elem = document.getElementById("audio-placeholder");
+        let cursorElem = document.getElementById("track-player-cursor");
+        let currTime, duration;
+        elem.addEventListener("loadedmetadata", (e) => {
+            elem.play();
+            duration = e.target.duration;
+            setInterval(() => {
+                currTime = e.target.currentTime;
+                this.setState({
+                    duration: this.formatDuration(Math.floor(duration)),
+                    currentTime: this.formatDuration(Math.floor(currTime))
+                });
+                let currPos = (currTime / duration) * 100;
+                cursorElem.style.left = currPos.toString() + "%";
+            }, 1000);
+        })
+    }
+
+    render(){
+        let url = this.props.url;
+        url = "http://" + url;
+        return (
+            <div className="music-placeholder">
+                <audio controls id="audio-placeholder">
+                    <source id="audio-src-placeholder" src={url} type="audio/mp3" />
+                </audio>
+                <div className="track-player-ruler">
+                    <div className="track-player-currenttime-placeholder">
+                        {this.state.currentTime}
+                    </div>
+                    <div className="track-player-trackname-placeholder">
+                        {this.props.name}
+                    </div>
+                    <div className="track-player-duration-placeholder">
+                        {this.state.duration}
+                    </div>
+                    <div className="track-player-cursor" id="track-player-cursor"></div>
+                </div>
+            </div>
+        );
+    }
+}
+
 function MusicHome(){
     let authToken = sessionStorage.getItem("authentication-token");
     const [tracks, updateTracks] = useState(null);
+
+    const [audioPlayerUrl, setAudioPlayerUrl] = useState(null);
+    const [trackName, setAudioTrackName] = useState(null);
 
     let headers = {
         'Accept': 'application/json, text/plain, */*',
@@ -50,7 +143,7 @@ function MusicHome(){
             let trackURLs = data.message;
             let musicTracks = [];
             trackURLs.forEach(element => {
-                let newTrackElement = <TrackPlaceholder {...element} key={element.name} />
+                let newTrackElement = <TrackPlaceholder {...element} key={element.name} setAudioPlayerUrl={setAudioPlayerUrl} setAudioTrackName={setAudioTrackName} />
                 musicTracks.push(newTrackElement);
             });
             updateTracks(musicTracks);
@@ -81,6 +174,7 @@ function MusicHome(){
                         </div>
                     </div>
                 </div>
+                {audioPlayerUrl && <AudioPlayer url={audioPlayerUrl} name={trackName} />}
             </div>
         );
     }
