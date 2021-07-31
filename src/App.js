@@ -26,12 +26,6 @@ class App extends Component{
           <Route path="/login">
             <Login />
           </Route>
-          {/* <Route path="/contact">
-            <Contact />
-          </Route>
-          <Route path="/notes">
-            <Notes details={this.state.data} />
-          </Route> */}
           <Route path="/profile">
             <Profile />
           </Route>
